@@ -1,12 +1,12 @@
-name: cursor-skill in sync
+name: Cursor skill in sync
 
-# Fails if .cursor/skills/i-have-adhd/SKILL.md drifts from the canonical
-# skills/i-have-adhd/SKILL.md. The .cursor copy is a real file, not a
+# Fails if .cursor/skills/evidence-first/SKILL.md drifts from the canonical
+# skills/evidence-first/SKILL.md. The .cursor copy is a real file, not a
 # symlink, so Windows clones and GitHub ZIP downloads work (#55).
 on:
   pull_request:
     paths:
-      - skills/i-have-adhd/SKILL.md
+      - skills/evidence-first/SKILL.md
       - .cursor/skills/**
       - .github/workflows/cursor-skill-sync.yml
   push:
@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Fail if the .cursor copy differs from SKILL.md
         run: |
-          cmp skills/i-have-adhd/SKILL.md .cursor/skills/i-have-adhd/SKILL.md || {
-            echo "::error::.cursor copy is out of sync. Run: cp skills/i-have-adhd/SKILL.md .cursor/skills/i-have-adhd/SKILL.md"
+          cmp skills/evidence-first/SKILL.md .cursor/skills/evidence-first/SKILL.md || {
+            echo "::error::.cursor copy is out of sync. Run: cp skills/evidence-first/SKILL.md .cursor/skills/evidence-first/SKILL.md"
             exit 1
           }

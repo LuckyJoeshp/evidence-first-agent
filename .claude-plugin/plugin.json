@@ -1,9 +1,9 @@
 {
-  "name": "i-have-adhd",
-  "version": "0.1.0",
-  "description": "Shape Claude Code output for an ADHD reader: lead with the next action, number steps, suppress tangents, restate state, make wins visible.",
+  "name": "evidence-first",
+  "version": "1.0.0",
+  "description": "Put outcomes first while preserving decision-critical evidence in Claude Code responses.",
   "author": {
-    "name": "Ayoub G.",
-    "url": "https://github.com/ayghri"
+    "name": "LuckyJoeshp",
+    "url": "https://github.com/LuckyJoeshp"
   }
 }

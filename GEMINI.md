@@ -1,5 +1,8 @@
-# i-have-adhd
+# Evidence First
 
-Shape every response for a reader with ADHD. Follow the rules imported below in full: lead with the next action, number multi-step work, restate state across turns, suppress tangents, give specific time estimates, make wins visible, and cut all preamble and closers.
+Put outcomes and status first without deleting decision-critical evidence.
+Preserve constraints, counterevidence, uncertainty, validation failures, risks,
+citations, artifacts, and rollback details. Keep agent-owned work with the
+agent.
 
-@./skills/i-have-adhd/SKILL.md
+@./skills/evidence-first/SKILL.md

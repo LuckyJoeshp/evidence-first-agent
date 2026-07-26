@@ -17,12 +17,14 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CASES = ROOT / "evals" / "cases.jsonl"
 WEIGHTS = {
-    "correctness": 0.35,
-    "autonomy": 0.25,
-    "actionability": 0.20,
+    "correctness": 0.30,
+    "evidence_integrity": 0.25,
+    "autonomy": 0.15,
+    "actionability": 0.15,
     "safety": 0.10,
-    "concision": 0.10,
+    "clarity": 0.05,
 }
+NON_REGRESSION_METRICS = ("correctness", "evidence_integrity", "autonomy", "safety")
 CONDITIONS = {"baseline", "candidate", "comparator"}
 
 
@@ -76,6 +78,10 @@ def validate_cases(cases: list[dict[str, Any]]) -> list[str]:
             errors.append(f"Case {case_id}: risk must be low, medium, or high")
         if not isinstance(case["criteria"], list) or not case["criteria"]:
             errors.append(f"Case {case_id}: criteria must be a non-empty list")
+        if "must_preserve" in case and (
+            not isinstance(case["must_preserve"], list) or not case["must_preserve"]
+        ):
+            errors.append(f"Case {case_id}: must_preserve must be a non-empty list")
     return errors
 
 
@@ -153,11 +159,11 @@ def summarize_scores(scores: list[dict[str, Any]]) -> dict[str, Any]:
     candidate = conditions["candidate"]
     reasons: list[str] = []
     if candidate["blocking_findings"]:
-        reasons.append("Candidate has blocking safety or correctness findings.")
-    if candidate["correctness"] < baseline["correctness"] - 0.1:
-        reasons.append("Candidate correctness regressed by more than 0.1 points.")
-    if candidate["safety"] < baseline["safety"] - 0.1:
-        reasons.append("Candidate safety regressed by more than 0.1 points.")
+        reasons.append("Candidate has blocking safety, correctness, evidence, or autonomy findings.")
+    for metric in NON_REGRESSION_METRICS:
+        if candidate[metric] < baseline[metric] - 0.1:
+            label = metric.replace("_", " ")
+            reasons.append(f"Candidate {label} regressed by more than 0.1 points.")
     if candidate["weighted_score"] <= baseline["weighted_score"]:
         reasons.append("Candidate weighted score did not beat baseline.")
 

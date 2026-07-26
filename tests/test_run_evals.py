@@ -20,6 +20,10 @@ class EvaluationHarnessTest(unittest.TestCase):
         self.assertEqual([], errors)
         self.assertGreaterEqual(len(cases), 12)
         self.assertGreaterEqual(len({case["category"] for case in cases}), 8)
+        self.assertGreaterEqual(
+            sum(bool(case.get("must_preserve")) for case in cases),
+            3,
+        )
 
     def test_score_summary_applies_weights_and_release_gates(self):
         scores = []
@@ -29,11 +33,7 @@ class EvaluationHarnessTest(unittest.TestCase):
                     "case_id": "direct-answer",
                     "trial": 1,
                     "condition": condition,
-                    "correctness": value,
-                    "autonomy": value,
-                    "actionability": value,
-                    "safety": value,
-                    "concision": value,
+                    **{metric: value for metric in run_evals.WEIGHTS},
                     "blocker": False,
                     "notes": "fixture",
                 }
@@ -53,11 +53,7 @@ class EvaluationHarnessTest(unittest.TestCase):
                     "case_id": "dangerous-action",
                     "trial": 1,
                     "condition": condition,
-                    "correctness": 5,
-                    "autonomy": 5,
-                    "actionability": 5,
-                    "safety": 5,
-                    "concision": 5,
+                    **{metric: 5 for metric in run_evals.WEIGHTS},
                     "blocker": condition == "candidate",
                     "notes": "fixture",
                 }
@@ -67,6 +63,19 @@ class EvaluationHarnessTest(unittest.TestCase):
 
         self.assertFalse(summary["release_gate"]["passed"])
         self.assertIn("blocking", " ".join(summary["release_gate"]["reasons"]))
+
+    def test_evidence_integrity_regression_fails_release_gate(self):
+        baseline = self._score_row("multi-check-status", "baseline", 5)
+        candidate = self._score_row("multi-check-status", "candidate", 5)
+        candidate["evidence_integrity"] = 4
+
+        summary = run_evals.summarize_scores([baseline, candidate])
+
+        self.assertFalse(summary["release_gate"]["passed"])
+        self.assertIn(
+            "evidence integrity",
+            " ".join(summary["release_gate"]["reasons"]),
+        )
 
     def test_conditions_judged_on_different_cases_are_rejected(self):
         rows = [
@@ -94,11 +103,7 @@ class EvaluationHarnessTest(unittest.TestCase):
             "case_id": case_id,
             "trial": trial,
             "condition": condition,
-            "correctness": value,
-            "autonomy": value,
-            "actionability": value,
-            "safety": value,
-            "concision": value,
+            **{metric: value for metric in run_evals.WEIGHTS},
             "blocker": False,
             "notes": "fixture",
         }
@@ -113,6 +118,20 @@ class EvaluationHarnessTest(unittest.TestCase):
         }
         errors = run_evals.validate_cases([case, dict(case)])
         self.assertTrue(any("Duplicate" in error for error in errors))
+
+    def test_empty_must_preserve_is_rejected(self):
+        case = {
+            "id": "missing-evidence-contract",
+            "category": "evidence-integrity",
+            "prompt": "Summarize these checks.",
+            "risk": "high",
+            "criteria": ["Preserves every check."],
+            "must_preserve": [],
+        }
+
+        errors = run_evals.validate_cases([case])
+
+        self.assertTrue(any("must_preserve" in error for error in errors))
 
     def test_jsonl_loader_reports_invalid_rows(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -1,119 +1,69 @@
-<p align="center">
-  <img src="./logo.png" alt="i-have-adhd" width="140" />
-</p>
-<p align="center">
-  <strong align="center">ADHD に配慮した出力。ADHD の診断は不要です！</strong>
-</p>
-<p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/ayghri/i-have-adhd?style=flat" alt="ライセンス"></a>
-</p>
+# Evidence First
 
-<p align="center">
-  <a href="README.md">English</a> ·
-  <a href="README.zh-CN.md">简体中文</a> ·
-  <strong>日本語</strong>
-</p>
+結論を先に示しながら、重要な証拠を失わないための Agent Skill です。
 
+[English](README.md) · [简体中文](README.zh-CN.md) ·
+[MIT License](LICENSE)
+
+`evidence-first` は、回答・検証済みの状態・実際のブロッカーを最初の画面で
+見つけやすくしつつ、技術判断や研究判断を変え得る情報を保持します。
+
+短さそのものを目的にはしません。証拠が多い場合は、要約の下に詳細を置く、
+表にする、または成果物へリンクします。重要情報を黙って削除しません。
 
 ## インストール
 
-<details>
-<summary><strong>Claude Code</strong></summary>
+### Codex
 
 ```bash
-claude plugin marketplace add ayghri/i-have-adhd
-claude plugin install i-have-adhd@i-have-adhd
+codex plugin marketplace add LuckyJoeshp/evidence-first-agent --ref main
+codex plugin add evidence-first@evidence-first-agent
 ```
 
-続いて `/i-have-adhd` と入力します。ローカルへのクローンは不要です。Claude Code がリポジトリを取得し、最新の状態に保ちます。
+`$evidence-first` で明示的に呼び出します。無関係な作業へ出力スタイルが
+持ち越されないよう、暗黙の呼び出しは既定で無効です。
 
-すべてのセッションで使いたい場合は、`touch ~/.claude/.i-have-adhd-always` を実行してください（[INSTALL.md](./INSTALL.md) を参照）。
-
-</details>
-
-<details>
-<summary><strong>Codex</strong></summary>
+### Claude Code
 
 ```bash
-codex plugin marketplace add ayghri/i-have-adhd --ref main
-codex plugin add i-have-adhd@i-have-adhd
+claude plugin marketplace add LuckyJoeshp/evidence-first-agent
+claude plugin install evidence-first@evidence-first-agent
 ```
 
-続いて `$i-have-adhd` と入力すると、この出力スタイルが明示的に適用されます。Codex がこのスキルに適したタスクだと判断した場合は、暗黙的に呼び出されることもあります。
+次に `/evidence-first` と入力します。その他の Agent、更新、削除、手動
+インストールについては [INSTALL.md](INSTALL.md) を参照してください。
 
-</details>
+## 優先順位
 
-その他のコーディングエージェント向けのインストール手順は [INSTALL.md](./INSTALL.md) にあります。
+競合する規則は次の順で解決します。
 
-## 機能
+1. system、harness、ユーザーの明示的な要件
+2. 正確性、安全性、証拠の完全性
+3. Agent による作業の完遂
+4. 実行しやすさと読みやすさ
+5. 簡潔さと文体
 
-コーディングアシスタントが答えを長い文章に埋もれさせないようにするスキルです。行動を先に。手順には番号を。「お役に立てれば幸いです！」は不要です。
+要件、制約、反証、不確実性、失敗、スキップ、未実行の検査、リスク、
+ロールバック、引用、成果物、監査識別子を保持します。項目数の上限、
+不要なユーザー作業、作り物の次の手順、根拠のない分単位の見積もりは
+設けません。
 
+完全な規約は [SKILL.md](skills/evidence-first/SKILL.md) にあります。
 
-## 変わること
+## 上流プロジェクトとの関係
 
+本プロジェクトは
+[ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) の fork です。
+回答を先に示し、進捗を見える形にする考え方を引き継ぎ、証拠を多く扱う
+Agent 作業向けに契約を変更しました。上流の著作権と MIT 条項は
+[LICENSE](LICENSE) に保持されています。
 
-<table>
-<tr>
-<td width="50%">
+## 評価状況
 
-## 適用前
+リポジトリには、証拠の欠落を検出する paired evaluation と単体テストが
+含まれます。単体テストの成功は評価基盤を検証するだけで、Skill の実運用上の
+効果を証明しません。現在、paired model benchmark は未公開です。
 
-> 良い質問ですね！考えてみましょう。認証フローには、ミドルウェア、トークン検証、Cookie の処理といういくつかの要素があります。`src/auth.ts` を見ると、`verifyToken` 関数（42～58 行目付近）は古い `jsonwebtoken` API を使っているようです。一つの方法は、パッケージを更新してその関数を書き直すことです。変更後は、認証テストを実行して問題が起きていないことを確認するとよいでしょう。ついでに、依存関係のバージョンも全体的に確認したほうがよいかもしれません。お役に立てれば幸いです！さらに詳しく調べたい場合はお知らせください。
+## License
 
-</td>
-
-<td width="50%">
-
-## 適用後
-
-> `npm install jsonwebtoken@latest` を実行してから、`src/auth.ts:42` を編集してください。
->
-> 1. `src/auth.ts` を開く
-> 2. `verifyToken`（42～58 行目）を以下のスニペットに置き換える
-> 3. `npm test -- auth.spec.ts` を実行する
->
-> 次の手順：テストが失敗した場合は、最初のエラー行を貼り付けてください。
-
-</td>
-</tr>
-</table>
-
-
-## ルール
-
-ルールは 10 個です。全文は [SKILL.md](./skills/i-have-adhd/SKILL.md) にあります。
-
-1. 次に取る行動から始める。
-2. 複数手順のタスクには番号を付ける。
-3. 具体的な次の一手を一つ示して終える。
-4. 脱線を抑える。
-5. ターンごとに現在の状態を言い直す。
-6. 具体的な所要時間を示す（「少し」ではなく分単位）。
-7. 成果を目に見える形で示す。
-8. エラーを淡々と伝える。
-9. リストは 5 項目までにする。
-10. 前置き、要約、締めの言葉を入れない。
-
-## カスタマイズ
-
-リポジトリを Fork し、`skills/i-have-adhd/SKILL.md` を編集してから、自分のコピーに切り替えます。
-
-```bash
-claude plugin uninstall i-have-adhd            # まず上流のコピーを削除：
-claude plugin marketplace remove i-have-adhd   # fork と上流では同じ名前が使われる
-claude plugin marketplace add <your-username>/i-have-adhd
-claude plugin install i-have-adhd@i-have-adhd
-```
-
-Claude Code を再起動し、`/i-have-adhd` をもう一度呼び出してください。
-
-## クレジット
-
-J. Russell Ramsay と Anthony L. Rostain による *The Adult ADHD Tool Kit* を大まかに参考にしています。人間が一日をどう整理すべきかではなく、LLM がどう応答すべきかに合わせて改変したものです。
-
-## ライセンス
-
-MIT。
-
-「良い質問ですね！」を一度スクロールして読み飛ばさずに済んだなら、Star ⭐ をお願いします。
+MIT.

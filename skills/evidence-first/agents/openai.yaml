@@ -1,0 +1,7 @@
+interface:
+  display_name: "Evidence First"
+  short_description: "Readable answers with decision evidence intact"
+  default_prompt: "Use $evidence-first to put the outcome first while preserving every decision-critical fact, risk, and validation result."
+
+policy:
+  allow_implicit_invocation: false

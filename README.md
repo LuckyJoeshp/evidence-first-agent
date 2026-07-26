@@ -1,119 +1,143 @@
-<p align="center">
-  <img src="./logo.png" alt="i-have-adhd" width="140" />
-</p>
-<p align="center">
-  <strong align="center">ADHD-friendly outputs. No ADHD diagnosis needed!</strong>
-</p>
-<p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/ayghri/i-have-adhd?style=flat" alt="License"></a>
-</p>
+# Evidence First
 
-<p align="center">
-  <strong>English</strong> ·
-  <a href="README.zh-CN.md">简体中文</a> ·
-  <a href="README.ja.md">日本語</a>
-</p>
+Outcome-first responses without evidence loss.
 
+[简体中文](README.zh-CN.md) · [日本語](README.ja.md) ·
+[MIT License](LICENSE)
+
+`evidence-first` is an output-shaping skill for coding agents. It makes the
+answer, verified status, or real blocker easy to find while preserving the
+facts that determine a technical or research decision.
+
+It is deliberately **not** a shortest-answer skill. Large evidence is layered,
+tabulated, or linked—not silently deleted.
 
 ## Install
 
-<details>
-<summary><strong>Claude Code</strong></summary>
+### Codex
 
 ```bash
-claude plugin marketplace add ayghri/i-have-adhd
-claude plugin install i-have-adhd@i-have-adhd
+codex plugin marketplace add LuckyJoeshp/evidence-first-agent --ref main
+codex plugin add evidence-first@evidence-first-agent
 ```
 
-Then type `/i-have-adhd`. No local clone needed: Claude Code fetches the repo and keeps it updated.
+Invoke it explicitly with:
 
-Want it on every session? `touch ~/.claude/.i-have-adhd-always` (see [INSTALL.md](./INSTALL.md)).
+```text
+$evidence-first
+```
 
-</details>
+Implicit invocation is disabled by default so an output style does not
+unexpectedly override unrelated work.
 
-<details>
-<summary><strong>Codex</strong></summary>
+### Claude Code
 
 ```bash
-codex plugin marketplace add ayghri/i-have-adhd --ref main
-codex plugin add i-have-adhd@i-have-adhd
+claude plugin marketplace add LuckyJoeshp/evidence-first-agent
+claude plugin install evidence-first@evidence-first-agent
 ```
 
-Then type `$i-have-adhd` to apply the output style explicitly. The skill can also be invoked implicitly when Codex sees a task that benefits from it.
+Then type `/evidence-first`.
 
-</details>
+See [INSTALL.md](INSTALL.md) for other agents, updates, uninstalling, manual
+installation, and the optional Claude Code always-on flag.
 
-Install instructions for other coding agents live in [INSTALL.md](./INSTALL.md).
+## The core contract
 
-## What it does
+When rules conflict, apply this priority order:
 
-A skill for your coding assistant that stops it from burying the answer. Action first. Steps numbered. No "Hope this helps!"
+1. System, harness, and explicit user requirements
+2. Correctness, safety, and evidence integrity
+3. Agent ownership and task completion
+4. Actionability and scanability
+5. Brevity and style
 
+The skill must preserve:
 
-## What changes
+- requirements, constraints, and acceptance criteria
+- observed facts, separately labeled inference and assumptions
+- supporting evidence and material counterevidence
+- uncertainty, limitations, and sample or decision boundaries
+- passed, failed, skipped, unavailable, and unrun checks
+- risks, rollback points, citations, artifacts, and audit identifiers
 
+There is no five-item cap. There is no forced user homework, fabricated next
+step, or uncalibrated minute estimate.
 
-<table>
-<tr>
-<td width="50%">
+Read the complete contract in
+[SKILL.md](skills/evidence-first/SKILL.md).
 
-## Before
+## Before and after
 
-> Great question! Let me think about this. Your auth flow has a few moving pieces: the middleware, the token verification, and the cookie handling. Looking at `src/auth.ts`, the `verifyToken` function (around lines 42-58) seems to be using an older `jsonwebtoken` API. One approach would be to update the package and rewrite that function. After making the change, you'd want to run the auth tests to confirm nothing breaks. By the way, you might also want to look at your dependency versions overall. Hope this helps! Let me know if you want to dig deeper.
+### Before
 
-</td>
+> The release is almost ready. Formatting, type checking, and unit tests look
+> good. There are a few auth integration issues to investigate, and we should
+> probably run the remaining tests and verify rollback.
 
-<td width="50%">
+### Evidence First
 
-## After
-
-> Run `npm install jsonwebtoken@latest`, then edit `src/auth.ts:42`.
+> **Release blocked.**
 >
-> 1. Open `src/auth.ts`
-> 2. Replace `verifyToken` (lines 42–58) with the snippet below
-> 3. Run `npm test -- auth.spec.ts`
+> | Check | Result |
+> | --- | --- |
+> | Formatting | Passed |
+> | Type checking | Passed |
+> | Unit tests | 812 passed |
+> | Integration tests | 3 auth failures |
+> | End-to-end tests | Not run because integration failed |
+> | Migration dry-run | Passed |
+> | Rollback restoration | Not tested |
 >
-> Next: paste the first failing line if any test fails.
+> Remaining risk: the auth failures block release, and rollback recoverability
+> is still unverified. The agent owns the next action: diagnose the three auth
+> failures, then run the blocked checks.
 
-</td>
-</tr>
-</table>
+The second response is easier to scan without turning missing evidence into a
+green result.
 
+## What changed from the upstream skill
 
-## The rules
+This project is a fork of
+[ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) and retains its
+useful answer-first and progress-visibility ideas.
 
-10 rules. Full text in [SKILL.md](./skills/i-have-adhd/SKILL.md).
+This fork changes the contract for evidence-heavy agent work:
 
-1. Lead with the next action.
-2. Number multi-step tasks.
-3. End with one concrete next step.
-4. Suppress tangents.
-5. Restate state every turn.
-6. Specific time estimates (minutes, not "a bit").
-7. Make wins visible.
-8. Matter-of-fact errors.
-9. Cap lists at 5 items.
-10. No preamble. No recap. No closers.
+- replaces hard brevity rules with progressive disclosure
+- makes evidence integrity outrank style
+- keeps agent-owned work with the agent
+- removes forced list caps, closers, next actions, and time estimates
+- removes medical framing and cross-topic persistence by default
+- adds evidence-preservation cases and release gates to the evaluation harness
 
-## Tune it
+Upstream copyright and MIT terms remain in [LICENSE](LICENSE).
 
-Fork, edit `skills/i-have-adhd/SKILL.md`, then swap your copy in:
+## Evaluation status
+
+The repository includes paired baseline/candidate runners, blinded scoring, and
+cases designed to catch evidence omission or role mixing.
 
 ```bash
-claude plugin uninstall i-have-adhd            # drop the upstream copy first:
-claude plugin marketplace remove i-have-adhd   # fork and upstream share both names
-claude plugin marketplace add <your-username>/i-have-adhd
-claude plugin install i-have-adhd@i-have-adhd
+python3 scripts/run_evals.py validate
+python3 -m unittest discover -s tests -v
 ```
 
-Restart Claude Code, then re-invoke `/i-have-adhd`.
+Passing these unit tests validates the harness mechanics, **not** the skill's
+real-world effectiveness. No paired model benchmark is published yet. Any
+future effectiveness claim must include the responses, model and CLI versions,
+trial count, rubric, and blinded scores described in
+[evals/README.md](evals/README.md).
 
-## Credits
+## Security
 
-Loosely based on *The Adult ADHD Tool Kit* by J. Russell Ramsay and Anthony L. Rostain. Adapted for how an LLM should respond, not how a human should organize their day.
+The Codex plugin declares only an instruction skill. It adds no MCP server,
+network service, or project write capability. The evaluation runner launches a
+configured model CLI only when a maintainer runs it manually.
+
+The marketplace entry pins the installable plugin to the `v1.0.0` release tag;
+the marketplace catalog itself is read from `main`.
 
 ## License
 
 MIT.
-
-Star ⭐ if it saved you one scroll past one "Great question!"

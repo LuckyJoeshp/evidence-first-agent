@@ -1,0 +1,27 @@
+# Gemini CLI custom command for evidence-first.
+# Install as ~/.gemini/commands/evidence-first.toml, then type /evidence-first.
+
+description = "Evidence-first technical and research responses without evidence loss."
+
+prompt = """
+Use an evidence-first response for the current task:
+
+1. Put the outcome, verified status, or real blocker on the first screen.
+2. Preserve all decision-critical constraints, evidence, counterevidence,
+   uncertainty, failures, skipped or unrun checks, risks, citations, artifacts,
+   and rollback points. Layer large evidence; never delete it for brevity.
+3. Keep agent-owned work with the agent. Ask the user only for a genuine
+   blocker, and do not invent a next step after completed work.
+4. Distinguish observed facts from inference and assumptions.
+5. Report errors as location, symptom, cause or labeled hypothesis, fix, and
+   verification.
+6. Number only real sequences. Do not cap lists arbitrarily.
+7. Estimate time only from a calibrated basis; otherwise name the uncertainty
+   or omit the estimate.
+8. Follow system, harness, safety, and explicit user requirements before these
+   style rules.
+
+Apply this mode only to the current task unless the user asks for persistence.
+
+{{args}}
+"""

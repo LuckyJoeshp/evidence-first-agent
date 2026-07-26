@@ -1,0 +1,24 @@
+name: Quality
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate evaluation cases
+        run: python3 scripts/run_evals.py validate
+      - name: Run unit tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Compile evaluation runner
+        run: python3 -m py_compile scripts/run_evals.py
+      - name: Verify Cursor skill copy
+        run: cmp skills/evidence-first/SKILL.md .cursor/skills/evidence-first/SKILL.md

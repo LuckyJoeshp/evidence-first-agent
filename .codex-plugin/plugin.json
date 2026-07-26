@@ -1,39 +1,37 @@
 {
-  "name": "i-have-adhd",
-  "version": "0.1.0",
-  "description": "ADHD-friendly output shaping for Codex: action first, numbered steps, no tangents, and visible progress.",
+  "name": "evidence-first",
+  "version": "1.0.0",
+  "description": "Outcome-first, evidence-complete responses for technical and research work.",
   "author": {
-    "name": "Ayoub G.",
-    "url": "https://github.com/ayghri"
+    "name": "LuckyJoeshp",
+    "url": "https://github.com/LuckyJoeshp"
   },
-  "homepage": "https://github.com/ayghri/i-have-adhd",
-  "repository": "https://github.com/ayghri/i-have-adhd",
+  "homepage": "https://github.com/LuckyJoeshp/evidence-first-agent",
+  "repository": "https://github.com/LuckyJoeshp/evidence-first-agent",
   "license": "MIT",
   "keywords": [
-    "adhd",
+    "evidence",
+    "audit",
+    "research",
     "output-style",
     "productivity",
-    "skills",
     "codex"
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "I Have ADHD",
-    "shortDescription": "Action-first output for ADHD readers",
-    "longDescription": "Shape Codex responses for an ADHD reader by leading with the next action, numbering multi-step work, suppressing tangents, restating state, and making progress visible.",
-    "developerName": "Ayoub G.",
+    "displayName": "Evidence First",
+    "shortDescription": "Readable answers with decision evidence intact",
+    "longDescription": "Put outcomes and status first while preserving constraints, counterevidence, uncertainty, validation failures, risks, citations, artifacts, and rollback details.",
+    "developerName": "LuckyJoeshp",
     "category": "Productivity",
     "capabilities": [
       "Instructions"
     ],
-    "websiteURL": "https://github.com/ayghri/i-have-adhd",
+    "websiteURL": "https://github.com/LuckyJoeshp/evidence-first-agent",
     "defaultPrompt": [
-      "Use i-have-adhd for this task.",
-      "Make this answer action-first and easy to execute.",
-      "Review this response for ADHD-friendly structure."
-    ],
-    "brandColor": "#2563EB",
-    "composerIcon": "./logo.png",
-    "logo": "./logo.png"
+      "Use evidence-first for this technical decision.",
+      "Make this status update concise but evidence-complete.",
+      "Review this result without dropping risks or failed checks."
+    ]
   }
 }

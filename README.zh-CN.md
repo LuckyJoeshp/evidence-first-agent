@@ -1,119 +1,133 @@
-<p align="center">
-  <img src="./logo.png" alt="i-have-adhd" width="140" />
-</p>
-<p align="center">
-  <strong align="center">对 ADHD 友好的输出。无需确诊 ADHD！</strong>
-</p>
-<p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/ayghri/i-have-adhd?style=flat" alt="许可证"></a>
-</p>
+# Evidence First
 
-<p align="center">
-  <a href="README.md">English</a> ·
-  <strong>简体中文</strong> ·
-  <a href="README.ja.md">日本語</a>
-</p>
+让结果先出现，但不牺牲关键证据。
 
+[English](README.md) · [日本語](README.ja.md) ·
+[MIT 许可证](LICENSE)
+
+`evidence-first` 是面向编程 agent 的输出整形 skill。它让答案、已验证状态或
+真实阻塞点在首屏可见，同时保留所有可能改变技术或研究决策的事实。
+
+它不是“越短越好”的 skill。证据很多时应当分层、制表或链接到制品，而不是
+静默删除。
 
 ## 安装
 
-<details>
-<summary><strong>Claude Code</strong></summary>
+### Codex
 
 ```bash
-claude plugin marketplace add ayghri/i-have-adhd
-claude plugin install i-have-adhd@i-have-adhd
+codex plugin marketplace add LuckyJoeshp/evidence-first-agent --ref main
+codex plugin add evidence-first@evidence-first-agent
 ```
 
-然后输入 `/i-have-adhd`。无需在本地克隆：Claude Code 会获取该仓库并保持更新。
+显式调用：
 
-想在每次会话中都启用它？运行 `touch ~/.claude/.i-have-adhd-always`（参见 [INSTALL.md](./INSTALL.md)）。
+```text
+$evidence-first
+```
 
-</details>
+默认关闭隐式调用，避免输出风格在无关任务中意外接管行为。
 
-<details>
-<summary><strong>Codex</strong></summary>
+### Claude Code
 
 ```bash
-codex plugin marketplace add ayghri/i-have-adhd --ref main
-codex plugin add i-have-adhd@i-have-adhd
+claude plugin marketplace add LuckyJoeshp/evidence-first-agent
+claude plugin install evidence-first@evidence-first-agent
 ```
 
-然后输入 `$i-have-adhd`，显式应用这种输出风格。当 Codex 发现某项任务适合使用此技能时，也可以隐式调用它。
+然后输入 `/evidence-first`。
 
-</details>
+其他 agent、更新、卸载、手动安装及 Claude Code 可选常驻模式见
+[INSTALL.md](INSTALL.md)。
 
-其他编程智能体的安装说明位于 [INSTALL.md](./INSTALL.md)。
+## 核心契约
 
-## 功能
+规则冲突时按以下顺序处理：
 
-这是一个面向编程助手的技能，阻止它把答案藏在冗长文字中。行动优先。步骤编号。不说“希望这能帮到你！”
+1. system、harness 与用户明确要求
+2. 正确性、安全性与证据完整性
+3. agent 自主执行与任务完成
+4. 可操作性与可扫描性
+5. 简洁和风格
 
+必须保留：
 
-## 有什么变化
+- 需求、约束和验收条件
+- 观测事实，以及分开标注的推断和假设
+- 支持证据与实质性反证
+- 不确定性、局限、样本边界和决策边界
+- 通过、失败、跳过、不可用及未运行的检查
+- 风险、回滚点、引用、制品路径和审计标识
 
+不存在“五项上限”，也不强制制造用户作业、下一步或没有校准依据的分钟估时。
 
-<table>
-<tr>
-<td width="50%">
+完整契约见 [SKILL.md](skills/evidence-first/SKILL.md)。
 
-## 之前
+## 前后对比
 
-> 问得好！让我想一想。你的身份验证流程包含几个环节：中间件、令牌验证和 Cookie 处理。查看 `src/auth.ts` 后，`verifyToken` 函数（大约第 42–58 行）似乎使用了旧版 `jsonwebtoken` API。一种做法是升级这个包并重写该函数。完成修改后，你需要运行身份验证测试，确认没有破坏任何功能。顺便一提，你可能还想整体检查一下依赖版本。希望这能帮到你！如果你想进一步研究，请告诉我。
+### 修改前
 
-</td>
+> 发布基本准备好了。格式、类型检查和单元测试都不错。还有几个认证集成问题，
+> 后续也应该跑完剩余测试并验证回滚。
 
-<td width="50%">
+### Evidence First
 
-## 之后
-
-> 运行 `npm install jsonwebtoken@latest`，然后编辑 `src/auth.ts:42`。
+> **发布阻塞。**
 >
-> 1. 打开 `src/auth.ts`
-> 2. 将 `verifyToken`（第 42–58 行）替换为下面的代码片段
-> 3. 运行 `npm test -- auth.spec.ts`
+> | 检查 | 结果 |
+> | --- | --- |
+> | 格式检查 | 通过 |
+> | 类型检查 | 通过 |
+> | 单元测试 | 812 项通过 |
+> | 集成测试 | 3 项认证失败 |
+> | 端到端测试 | 因集成失败而未运行 |
+> | 数据库迁移 dry-run | 通过 |
+> | 回滚恢复 | 未测试 |
 >
-> 下一步：如果有测试失败，请粘贴第一行报错。
+> 剩余风险：认证失败阻止发布，回滚可恢复性仍未验证。下一动作归 agent：
+> 先诊断三项认证失败，再运行被阻塞的检查。
 
-</td>
-</tr>
-</table>
+第二种输出更容易阅读，但没有把“未运行”包装成绿灯。
 
+## 相比上游的变化
 
-## 规则
+本项目 fork 自
+[ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd)，保留其“答案优先”
+和“进度可见”的优点。
 
-共 10 条规则。完整内容见 [SKILL.md](./skills/i-have-adhd/SKILL.md)。
+本 fork 面向证据密集型 agent 工作重新定义了契约：
 
-1. 先说下一步行动。
-2. 多步骤任务使用编号。
-3. 以一个具体的下一步结束。
-4. 避免离题。
-5. 每轮都重述当前状态。
-6. 给出明确的时间估计（用分钟，不说“一会儿”）。
-7. 让成果清晰可见。
-8. 客观陈述错误。
-9. 每个列表最多 5 项。
-10. 不写开场白、回顾或结束语。
+- 用渐进披露替代硬性压缩
+- 让证据完整性高于风格
+- agent 能完成的工作继续由 agent 完成
+- 移除列表上限、强制结束语、强制下一步和强制估时
+- 移除医学化表述，默认不跨无关话题持续
+- 在评测中加入证据遗漏和证据角色混淆闸门
 
-## 自定义
+上游版权与 MIT 条款继续保留在 [LICENSE](LICENSE)。
 
-Fork 此仓库，编辑 `skills/i-have-adhd/SKILL.md`，然后换成你的副本：
+## 评测状态
+
+仓库包含成对 baseline/candidate runner、盲评评分和专门捕捉证据遗漏的案例。
 
 ```bash
-claude plugin uninstall i-have-adhd            # 先移除上游副本：
-claude plugin marketplace remove i-have-adhd   # fork 与上游使用相同名称
-claude plugin marketplace add <your-username>/i-have-adhd
-claude plugin install i-have-adhd@i-have-adhd
+python3 scripts/run_evals.py validate
+python3 -m unittest discover -s tests -v
 ```
 
-重启 Claude Code，然后再次调用 `/i-have-adhd`。
+这些测试通过只能证明评测工具能工作，**不能证明 skill 已提升真实任务表现**。
+当前尚未发布成对模型基准。未来任何效果声明都必须同时公开响应、模型与 CLI
+版本、trial 数、rubric 和盲评分数，详见
+[evals/README.md](evals/README.md)。
 
-## 致谢
+## 安全
 
-内容大致参考 J. Russell Ramsay 和 Anthony L. Rostain 所著的 *The Adult ADHD Tool Kit*。本技能针对 LLM 应如何回应进行了改编，而不是教人们如何安排日常生活。
+Codex 插件仅声明 instruction skill，不添加 MCP、网络服务或项目写入能力。
+评测 runner 只有维护者手动运行时才会启动配置的模型 CLI。
+
+marketplace 中的可安装插件固定到 `v1.0.0` release tag；marketplace 目录本身
+从 `main` 获取。
 
 ## 许可证
 
 MIT。
-
-如果它让你少滚动一次屏幕、跳过一句“问得好！”，请点亮 Star ⭐
