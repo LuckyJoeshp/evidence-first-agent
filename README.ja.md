@@ -20,8 +20,14 @@ codex plugin marketplace add LuckyJoeshp/evidence-first-agent --ref main
 codex plugin add evidence-first@evidence-first-agent
 ```
 
-`$evidence-first` で明示的に呼び出します。無関係な作業へ出力スタイルが
-持ち越されないよう、暗黙の呼び出しは既定で無効です。
+インストール後に新しいスレッドを開始してください。証拠の欠落が判断を
+変え得る重要な技術・研究タスクでは、Codex がこの Skill を自動的に選択
+します。軽微な編集、単純な事実確認、日常会話、自由なブレインストーミング
+では通常モードを維持します。
+
+単一タスクで強制する場合は `$evidence-first` を使用できます。自動選択は
+タスク単位であり、常時有効ではありません。現在のタスクで無効にするには
+`normal mode` または `stop evidence-first mode` と伝えてください。
 
 ### Claude Code
 

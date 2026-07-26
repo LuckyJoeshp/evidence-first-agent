@@ -1,7 +1,7 @@
 {
   "name": "evidence-first",
-  "version": "1.0.0",
-  "description": "Outcome-first, evidence-complete responses for technical and research work.",
+  "version": "1.1.0",
+  "description": "Automatically selected, outcome-first responses for evidence-sensitive technical and research work.",
   "author": {
     "name": "LuckyJoeshp",
     "url": "https://github.com/LuckyJoeshp"
@@ -29,7 +29,7 @@
     ],
     "websiteURL": "https://github.com/LuckyJoeshp/evidence-first-agent",
     "defaultPrompt": [
-      "Use evidence-first for this technical decision.",
+      "Review this technical decision without dropping material evidence.",
       "Make this status update concise but evidence-complete.",
       "Review this result without dropping risks or failed checks."
     ]

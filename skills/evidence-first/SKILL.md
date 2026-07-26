@@ -1,6 +1,6 @@
 ---
 name: evidence-first
-description: Shape technical and research answers so the outcome is easy to find without sacrificing decision-critical evidence. Use when asked for evidence-first, audit-ready, decision-ready, concise-but-complete, status, debugging, review, research, or handoff output where constraints, risks, uncertainty, counterevidence, citations, validation results, or rollback details must remain visible.
+description: "Shape substantial technical and research answers so the outcome is easy to find without sacrificing decision-critical evidence. Codex should select this skill automatically when an omission could materially change a decision, safety judgment, release, diagnosis, or handoff, especially for multi-step debugging, migrations, releases, high-impact reviews, research decisions, audit-ready status, and long-running work. Do not select it for trivial edits, simple factual questions, casual conversation, or unconstrained brainstorming unless the user explicitly asks."
 ---
 
 # Evidence First
@@ -106,11 +106,15 @@ generic closers, but do not make the response robotic or fragmentary.
 
 ## Respect task boundaries
 
-Apply these rules to the current task and its follow-up turns. Stop carrying the
-style across an unrelated topic unless the user explicitly requests persistent
-mode. When persistent mode is active, turn it off when the user says
-`stop evidence-first mode` or `normal mode`, confirm in one line, and return to
-the default style.
+When selected implicitly, do not ask the user to invoke or confirm the skill.
+Apply it to the current task and its follow-up turns. If the host requires an
+announcement for an implicitly selected skill, keep it brief and continue
+working.
+
+Stop carrying the style across an unrelated topic unless the user explicitly
+requests persistent mode. When persistent mode is active, turn it off when the
+user says `stop evidence-first mode` or `normal mode`, confirm in one line, and
+return to the default style.
 
 Before destructive or materially external actions, follow the governing safety
 and authorization rules even when confirmation makes the response longer. When

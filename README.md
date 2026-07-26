@@ -21,14 +21,19 @@ codex plugin marketplace add LuckyJoeshp/evidence-first-agent --ref main
 codex plugin add evidence-first@evidence-first-agent
 ```
 
-Invoke it explicitly with:
+Start a new thread after installation. Codex selects the skill automatically
+for substantial technical or research work where losing evidence could change
+the decision. Trivial edits, simple factual questions, casual conversation,
+and open-ended brainstorming stay in the normal mode.
+
+You can still force the skill for one task with:
 
 ```text
 $evidence-first
 ```
 
-Implicit invocation is disabled by default so an output style does not
-unexpectedly override unrelated work.
+Automatic selection is task-scoped, not always-on. Say `normal mode` or
+`stop evidence-first mode` to disable it for the current task.
 
 ### Claude Code
 
@@ -109,6 +114,7 @@ This fork changes the contract for evidence-heavy agent work:
 - keeps agent-owned work with the agent
 - removes forced list caps, closers, next actions, and time estimates
 - removes medical framing and cross-topic persistence by default
+- lets Codex select the skill automatically with explicit negative triggers
 - adds evidence-preservation cases and release gates to the evaluation harness
 
 Upstream copyright and MIT terms remain in [LICENSE](LICENSE).
@@ -135,7 +141,7 @@ The Codex plugin declares only an instruction skill. It adds no MCP server,
 network service, or project write capability. The evaluation runner launches a
 configured model CLI only when a maintainer runs it manually.
 
-The marketplace entry pins the installable plugin to the `v1.0.0` release tag;
+The marketplace entry pins the installable plugin to the `v1.1.0` release tag;
 the marketplace catalog itself is read from `main`.
 
 ## License

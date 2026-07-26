@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_NAME = "evidence-first"
 MARKETPLACE_NAME = "evidence-first-agent"
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 REPOSITORY_URL = "https://github.com/LuckyJoeshp/evidence-first-agent"
 
 
@@ -69,13 +69,17 @@ class RepositoryContractTest(unittest.TestCase):
         self.assertNotIn("Dopamine", skill)
         self.assertNotIn("Cap lists at 5", skill)
 
-    def test_codex_invocation_is_explicit(self):
+    def test_codex_invocation_is_implicit_and_bounded(self):
         config = (ROOT / "skills/evidence-first/agents/openai.yaml").read_text(
             encoding="utf-8"
         )
+        skill = (ROOT / "skills/evidence-first/SKILL.md").read_text(encoding="utf-8")
 
         self.assertIn('default_prompt: "Use $evidence-first', config)
-        self.assertIn("allow_implicit_invocation: false", config)
+        self.assertIn("allow_implicit_invocation: true", config)
+        self.assertIn("Codex should select this skill automatically", skill)
+        self.assertIn("Do not select it for trivial edits", skill)
+        self.assertIn("do not ask the user to invoke or confirm the skill", skill)
 
     def test_gemini_command_is_valid_toml(self):
         with (ROOT / "skills/evidence-first/agents/gemini.toml").open("rb") as source:
@@ -87,6 +91,8 @@ class RepositoryContractTest(unittest.TestCase):
     def test_readme_does_not_claim_unpublished_effectiveness(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
 
+        self.assertIn("Codex selects the skill automatically", readme)
+        self.assertIn("task-scoped, not always-on", readme)
         self.assertIn("No paired model benchmark is published yet", readme)
         self.assertIn("not", readme[readme.index("Passing these unit tests") :].splitlines()[0])
 

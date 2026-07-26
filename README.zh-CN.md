@@ -20,13 +20,18 @@ codex plugin marketplace add LuckyJoeshp/evidence-first-agent --ref main
 codex plugin add evidence-first@evidence-first-agent
 ```
 
-显式调用：
+安装后新开一个 thread。对于遗漏证据可能改变判断的复杂技术或研究任务，
+Codex 会自动选择这个 skill；琐碎修改、简单事实问题、日常对话和开放式
+brainstorming 保持普通模式。
+
+仍可为单个任务强制调用：
 
 ```text
 $evidence-first
 ```
 
-默认关闭隐式调用，避免输出风格在无关任务中意外接管行为。
+自动选择只作用于当前任务，不是全局常驻。说 `normal mode` 或
+`stop evidence-first mode` 可在当前任务停用。
 
 ### Claude Code
 
@@ -102,6 +107,7 @@ claude plugin install evidence-first@evidence-first-agent
 - agent 能完成的工作继续由 agent 完成
 - 移除列表上限、强制结束语、强制下一步和强制估时
 - 移除医学化表述，默认不跨无关话题持续
+- 允许 Codex 按任务自动选择，并设置明确的反向触发边界
 - 在评测中加入证据遗漏和证据角色混淆闸门
 
 上游版权与 MIT 条款继续保留在 [LICENSE](LICENSE)。
@@ -125,7 +131,7 @@ python3 -m unittest discover -s tests -v
 Codex 插件仅声明 instruction skill，不添加 MCP、网络服务或项目写入能力。
 评测 runner 只有维护者手动运行时才会启动配置的模型 CLI。
 
-marketplace 中的可安装插件固定到 `v1.0.0` release tag；marketplace 目录本身
+marketplace 中的可安装插件固定到 `v1.1.0` release tag；marketplace 目录本身
 从 `main` 获取。
 
 ## 许可证

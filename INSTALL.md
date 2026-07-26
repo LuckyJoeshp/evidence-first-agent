@@ -1,6 +1,6 @@
 # Install Evidence First
 
-The stable plugin payload is pinned to release tag `v1.0.0`. The repository
+The stable plugin payload is pinned to release tag `v1.1.0`. The repository
 marketplace catalog is read from `main` so future releases can move that pin
 deliberately.
 
@@ -13,13 +13,20 @@ codex plugin marketplace add LuckyJoeshp/evidence-first-agent --ref main
 codex plugin add evidence-first@evidence-first-agent
 ```
 
-Start a new thread and invoke:
+Start a new thread after installation. Codex automatically selects the skill
+for substantial technical and research tasks where omitted evidence could
+change a decision. It stays off for trivial edits, simple factual questions,
+casual conversation, and unconstrained brainstorming.
+
+Explicit invocation remains available as an override:
 
 ```text
 $evidence-first
 ```
 
-The Codex skill disables implicit invocation by default.
+Say `normal mode` or `stop evidence-first mode` to disable it for the current
+task. Automatic selection is task-scoped and is not equivalent to always-on
+mode.
 
 ### Verify
 
@@ -136,7 +143,7 @@ In the Agent Panel, choose **Create skill from URL** and use the release-pinned
 file:
 
 ```text
-https://github.com/LuckyJoeshp/evidence-first-agent/blob/v1.0.0/skills/evidence-first/SKILL.md
+https://github.com/LuckyJoeshp/evidence-first-agent/blob/v1.1.0/skills/evidence-first/SKILL.md
 ```
 
 Choose Project scope for one repository or User scope for all repositories.
@@ -156,11 +163,11 @@ Invoke `/evidence-first`.
 ```bash
 mkdir -p ~/.gemini/commands
 curl -fsSL \
-  https://raw.githubusercontent.com/LuckyJoeshp/evidence-first-agent/v1.0.0/skills/evidence-first/agents/gemini.toml \
+  https://raw.githubusercontent.com/LuckyJoeshp/evidence-first-agent/v1.1.0/skills/evidence-first/agents/gemini.toml \
   -o ~/.gemini/commands/evidence-first.toml
 ```
 
-The command route is fixed to `v1.0.0`; inspect the file before installing if
+The command route is fixed to `v1.1.0`; inspect the file before installing if
 your environment requires reviewed third-party instructions.
 
 ## Manual Agent Skill installation
@@ -168,7 +175,7 @@ your environment requires reviewed third-party instructions.
 Clone the reviewed release:
 
 ```bash
-git clone --branch v1.0.0 --depth 1 \
+git clone --branch v1.1.0 --depth 1 \
   https://github.com/LuckyJoeshp/evidence-first-agent.git
 ```
 
@@ -177,7 +184,10 @@ folder name `evidence-first`.
 
 ## Activation behavior
 
-- On-demand invocation applies to the current task and its follow-up turns.
+- On Codex, the agent selects the skill automatically for substantial,
+  evidence-sensitive work. Explicit invocation remains an override.
+- Automatic or on-demand invocation applies to the current task and its
+  follow-up turns.
 - It stops carrying across an unrelated topic unless persistent mode is
   explicitly requested.
 - A system, harness, or user output contract always outranks the skill.
